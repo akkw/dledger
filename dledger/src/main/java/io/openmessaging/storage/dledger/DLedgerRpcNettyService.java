@@ -299,6 +299,9 @@ public class DLedgerRpcNettyService extends DLedgerRpcService {
                                ChannelHandlerContext ctx) {
         RemotingCommand response = null;
         try {
+            if (request.getCode() == 50001) {
+                LOGGER.info("request code: reqData: {}", new String(request.getBody()));
+            }
             if (t != null) {
                 //the t should not be null, using error code instead
                 throw t;

@@ -284,6 +284,7 @@ public class DLedgerServer extends AbstractDLedgerServer {
                 } else {
                     DLedgerEntry dLedgerEntry = new DLedgerEntry();
                     dLedgerEntry.setBody(request.getBody());
+                    LOGGER.info("handleAppend this:{}, entryData: {}",this, new String(request.getBody()));
                     DLedgerEntry resEntry = dLedgerStore.appendAsLeader(dLedgerEntry);
                     return dLedgerEntryPusher.waitAck(resEntry, false);
                 }

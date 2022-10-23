@@ -49,4 +49,19 @@ public class AppendCommand extends BaseCommand {
         }
         dLedgerClient.shutdown();
     }
+    public void setGroup(String group) {
+        this.group = group;
+    }
+
+    public void setPeers(String peers) {
+        this.peers = peers;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
 }

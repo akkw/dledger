@@ -192,6 +192,7 @@ public class DLedgerEntryPusher {
                 response.setIndex(index);
                 response.setLeaderId(this.memberState.getSelfId());
                 response.setPos(((AppendFuture<?>) future).getPos());
+                LOGGER.info("index: {}",response.getIndex());
                 future.complete(response);
                 return true;
             }
@@ -484,6 +485,7 @@ public class DLedgerEntryPusher {
             }
             checkQuotaAndWait(entry);
             PushEntryRequest request = buildPushRequest(entry, PushEntryRequest.Type.APPEND);
+            logger.info("doAppendInner index: {}, entryData: {}", index, new String(entry.getBody()));
             CompletableFuture<PushEntryResponse> responseFuture = dLedgerRpcService.push(request);
             pendingMap.put(index, System.currentTimeMillis());
             responseFuture.whenComplete((x, ex) -> {
@@ -492,6 +494,7 @@ public class DLedgerEntryPusher {
                     DLedgerResponseCode responseCode = DLedgerResponseCode.valueOf(x.getCode());
                     switch (responseCode) {
                         case SUCCESS:
+                            logger.info("doAppendInner success index: {}, entryData: {}", index, new String(entry.getBody()));
                             pendingMap.remove(x.getIndex());
                             updatePeerWaterMark(x.getTerm(), peerId, x.getIndex());
                             quorumAckChecker.wakeup();
